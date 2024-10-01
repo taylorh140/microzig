@@ -1,6 +1,9 @@
-const GPIO_V1 = @import("microzig").chip.types.peripherals.gpio_v1.GPIO;
-const GPIO_V2 = @import("microzig").chip.types.peripherals.gpio_v2.GPIO;
-const GPIO_CHIP = @TypeOf(@import("microzig").peripherals.GPOIA);
+const GPIO_V1_Rt = @import("microzig").chip.types.peripherals.gpio_v1.GPIO;
+const GPIO_V2_Rt = @import("microzig").chip.types.peripherals.gpio_v2.GPIO;
+const GPIO_CHIP = @TypeOf(@import("microzig").chip.peripherals.GPIOA);
+
+const GPIO_V1 = @import("microzig").hal.gpio_v1;
+const GPIO_V2 = @import("microzig").hal.gpio_v2;
 
 pub const Pull = enum(u2) {
     none,
@@ -17,7 +20,7 @@ pub const Speed = enum(u2) {
 
 
 // There is only one type of gpio per chip.
-const GPIO_t = if(GPIO_CHIP == GPIO_V1) GPIO_V1 else GPIO_V2;
+const GPIO_t = if(GPIO_CHIP == *volatile GPIO_V1_Rt) GPIO_V1  else GPIO_V2;
 
 
 pub const GpioPin = struct {

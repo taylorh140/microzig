@@ -1,6 +1,10 @@
 const std = @import("std");
 const GPIO_t = @import("microzig").chip.types.peripherals.gpio_v1.GPIO;
 
+const Pull = @import("common/gpio.zig").Pull;
+const Speed = @import("common/gpio.zig").Speed;
+
+
 pub const gpio_v1 = packed struct {
     block: *volatile GPIO_t,
 

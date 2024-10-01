@@ -1,9 +1,9 @@
 const std = @import("std");
 const microzig = @import("microzig");
-const pf = microzig.chip.peripherials;
-const stm32 = microzig.hal;
+const stm32 = @import("microzig").hal;
 
-const led = stm32.GpioPin{.name = "LED1", .port=&pf.GPIOC,.pin=13};
+
+const led = stm32.GpioPin{.name = "LED1", .port=&stm32.GPIOC,.pin=13};
 
 pub fn main() !void {
     led.set_as_output(.low);
