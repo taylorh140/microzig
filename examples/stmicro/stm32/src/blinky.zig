@@ -2,10 +2,10 @@ const std = @import("std");
 const microzig = @import("microzig");
 const stm32 = @import("microzig").hal;
 
-const led = stm32.GpioPin{.name = "LED1", .port=&stm32.GPIOC,.pin=13};
+const led = stm32.GpioPin{ .name = "LED1", .port = &stm32.GPIOC, .pin = 13 };
 
 pub fn main() !void {
-    stm32.RCC.enableGPIOport(.GPIOC);
+    stm32.RCC.ABH2ENR.modify(.{ .GPIOCEN = 1 });
     led.set_as_output(.low);
 
     while (true) {
