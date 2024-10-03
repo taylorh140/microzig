@@ -1,6 +1,6 @@
 const std = @import("std");
 const MicroZig = @import("microzig/build");
-const rp2040 = @import("microzig/bsp/raspberrypi/rp2040");
+const rp2040 = @import("microzig/port/raspberrypi/rp2040");
 
 const available_examples = [_]Example{
     // RaspberryPi Boards:
@@ -8,7 +8,9 @@ const available_examples = [_]Example{
     .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_blinky", .file = "src/blinky.zig" },
     .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_flash-program", .file = "src/flash_program.zig" },
     .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_flash-id", .file = "src/flash_id.zig" },
-    .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_gpio-clk", .file = "src/gpio_clk.zig" },
+    .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_gpio-clock-output", .file = "src/gpio_clock_output.zig" },
+    .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_changing-system-clocks", .file = "src/changing_system_clocks.zig" },
+    .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_custom-clock-config", .file = "src/custom_clock_config.zig" },
     .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_i2c-bus-scan", .file = "src/i2c_bus_scan.zig" },
     .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_pwm", .file = "src/pwm.zig" },
     .{ .target = rp2040.boards.raspberrypi.pico, .name = "pico_random", .file = "src/random.zig" },
