@@ -1,5 +1,5 @@
-// const RCC_t = @import("microzig").chip.types.peripherals.rcc_f1.RCC;
-const RCC_t = @import("../../chips/all.zig").types.peripherals.rcc_f1.RCC;
+const RCC_t = @import("microzig").chip.types.peripherals.rcc_f1.RCC;
+//const RCC_t = @import("../../chips/all.zig").types.peripherals.rcc_f1.RCC;
 
 pub const Hz = u32;
 
@@ -136,6 +136,7 @@ pub const rcc_f1 = extern struct {
     block: *volatile RCC_t,
 
     pub fn init(ref: @This(), config: Config) void {
+        _ = config;
         const RCC = ref.block;
         //Use HSI for setup as it is always available
         RCC.CR.modify(.{ .HSION = 1 });
