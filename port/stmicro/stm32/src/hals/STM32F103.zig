@@ -1,6 +1,8 @@
 pub const gpio_v1 = @import("./blocks/gpio_v1.zig").gpio_v1;
 pub const rcc_f1 = @import("./blocks/rcc_f1.zig").rcc_f1;
 
+const HSI_FREQ = 8_000_000;
+
 const std = @import("std");
 const peripherals = @import("microzig").chip.peripherals;
 const microzig = @import("microzig");
