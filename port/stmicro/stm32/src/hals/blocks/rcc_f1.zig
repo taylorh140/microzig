@@ -1,5 +1,5 @@
-//const RCC_t = @import("microzig").chip.types.peripherals.rcc_f1.RCC;
-const RCC_t = @import("../../chips/all.zig").types.peripherals.rcc_f1.RCC;
+const RCC_t = @import("microzig").chip.types.peripherals.rcc_f1.RCC;
+//const RCC_t = @import("../../chips/all.zig").types.peripherals.rcc_f1.RCC;
 const hal = @import("microzig").hal;
 const std = @import("std");
 
@@ -172,46 +172,37 @@ pub const Config = struct {
 pub const rcc_f1 = extern struct {
     block: *volatile RCC_t,
 
-    pub fn init(ref: @This(), config: Config) void {
-        const RCC = ref.block;
-        //Use HSI for setup as it is always available
-        RCC.CR.modify(.{ .HSION = 1 });
-        while (!RCC.CR.read().HSERDY) {}
+    // pub fn init(ref: @This(), config: Config) void {
+    //     const RCC = ref.block;
+    //     //Use HSI for setup as it is always available
+    //     RCC.CR.modify(.{ .HSION = 1 });
+    //     while (!RCC.CR.read().HSERDY) {}
 
-        RCC.CFGR.modify(.{ .SW = .HSI });
-        while (RCC.CFGR.read().SWS != .HSI) {}
+    //     RCC.CFGR.modify(.{ .SW = .HSI });
+    //     while (RCC.CFGR.read().SWS != .HSI) {}
 
-        const hsi: ?Hz = switch (config.hsi) {
-            .false => null,
-            .true => hal.HSI_FREQ,
-        };
+    //     const hsi: ?Hz = switch (config.hsi) {
+    //         .false => null,
+    //         .true => hal.HSI_FREQ,
+    //     };
 
-        const hse = if (config.hse) |_hse| blk: {
-            switch (_hse.mode) {
-                .Oscillator => std.assert(_hse.freq >= FreqRanges.HSE_OSC.Min and _hse.freq <= FreqRanges.HSE_OSC.Max),
-                .Bypass => std.assert(_hse.freq >= FreqRanges.HSE_BYP.Min and _hse.freq <= FreqRanges.HSE_BYP.Max),
-            }
-            RCC.CR.modify(.{ .HSEBYP = _hse.mode != .Oscillator });
-            RCC.CR.modify(.{ .HSEON = true });
+    //     const hse = if (config.hse) |_hse| blk: {
+    //         switch (_hse.mode) {
+    //             .Oscillator => std.assert(_hse.freq >= FreqRanges.HSE_OSC.Min and _hse.freq <= FreqRanges.HSE_OSC.Max),
+    //             .Bypass => std.assert(_hse.freq >= FreqRanges.HSE_BYP.Min and _hse.freq <= FreqRanges.HSE_BYP.Max),
+    //         }
+    //         RCC.CR.modify(.{ .HSEBYP = _hse.mode != .Oscillator });
+    //         RCC.CR.modify(.{ .HSEON = true });
 
-            while (!RCC.CR.read().HSERDY) {}
-            break :blk _hse.freq;
-        } else blk: {
-            RCC.CR.modify(.{ .HSEON = false });
-            break :blk null;
-        };
+    //         while (!RCC.CR.read().HSERDY) {}
+    //         break :blk _hse.freq;
+    //     } else blk: {
+    //         RCC.CR.modify(.{ .HSEON = false });
+    //         break :blk null;
+    //     };
 
-        const hsi48 = null;
-
-        const pll = if(config.pll) |_pll| blk:{
-            (src_val,src_freq)
-            .HSI => {
-                std.assert(_pll.prediv != .DIV2,"if PLL source is HSI, PLL prediv must be 2.");
-                (PllSource.HSI_DIV2, hsi.?)
-            }
-
-        } else null;
-    }
+    //     const hsi48 = null;
+    // }
 
     pub fn enableGPIOport(ref: @This(), port: enum { GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG }) void {
         const self = ref.block;

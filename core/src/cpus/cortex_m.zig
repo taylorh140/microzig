@@ -21,7 +21,7 @@ const Core = enum {
 };
 
 const core: type = blk: {
-    const cortex_m = std.meta.stringToEnum(microzig.config.cpu_name) orelse @panic(std.fmt.comptimePrint("Unrecognized Cortex-M core name: {s}", .{microzig.config.cpu_name}));
+    const cortex_m = std.meta.stringToEnum(Core, microzig.config.cpu_name) orelse @panic(std.fmt.comptimePrint("Unrecognized Cortex-M core name: {s}", .{microzig.config.cpu_name}));
     break :blk switch (cortex_m) {
         .@"ARM Cortex-M0" => @import("cortex_m/m0"),
         .@"ARM Cortex-M0+" => @import("cortex_m/m0plus.zig"),
@@ -38,6 +38,7 @@ const mpu_present = @hasDecl(properties, "__MPU_PRESENT") and std.mem.eql(u8, pr
 pub const scb: *volatile core.SystemControlBlock = @ptrFromInt(scb_base);
 /// Nested Vector Interrupt Controller (NVIC)
 pub const nvic: *volatile core.NestedVectorInterruptController = @ptrFromInt(nvic_base);
+
 /// Memory Protection Unit (MPU)
 pub const mpu: *volatile core.MemoryProtectionUnit = if (mpu_present)
     @ptrFromInt(mpu_base)
@@ -185,9 +186,6 @@ fn create_interrupt_vector(
 pub const peripherals = struct {
     ///  System Tick Timer
     pub const SysTick = @as(*volatile types.peripherals.SysTick, @ptrFromInt(0xe000e010));
-
-    ///  System Control Space
-    pub const NVIC = @compileError("TODO"); // @ptrFromInt(*volatile types.peripherals.NVIC, 0xe000e100);
 
     ///  System Control Block
     pub const SCB = @as(*volatile types.peripherals.SCB, @ptrFromInt(0xe000ed00));
