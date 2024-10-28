@@ -18,10 +18,8 @@ pub const Speed = enum(u2) {
     veryhigh,
 };
 
-
 // There is only one type of gpio per chip.
-const GPIO_t = if(GPIO_CHIP == *volatile GPIO_V1_Rt) GPIO_V1  else GPIO_V2;
-
+const GPIO_t = if (GPIO_CHIP == *volatile GPIO_V1_Rt) GPIO_V1 else GPIO_V2;
 
 pub const GpioPin = struct {
     name: []const u8,

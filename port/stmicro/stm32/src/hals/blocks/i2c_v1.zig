@@ -1,10 +1,10 @@
 const std = @import("std");
 const time = @import("../timebase.zig");
 
-const TransactionError = @import("./common/i2c.zig").TransactionError; 
+const TransactionError = @import("./common/i2c.zig").TransactionError;
 
 pub const i2c_v1 = struct {
-    block: *volatile @import("microzig").chip.types.peripherals.i2c_v1.I2C;,
+    block: *volatile @import("microzig").chip.types.peripherals.i2c_v1.I2C,
 
     fn wait_for(data: anytype, val: @TypeOf(data.*), timeout: ?*time.timer) TransactionError!void {
         while (true) {

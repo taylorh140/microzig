@@ -4,7 +4,6 @@ const GPIO_t = @import("microzig").chip.types.peripherals.gpio_v1.GPIO;
 const Pull = @import("common/gpio.zig").Pull;
 const Speed = @import("common/gpio.zig").Speed;
 
-
 pub const gpio_v1 = packed struct {
     block: *volatile GPIO_t,
 
@@ -12,18 +11,18 @@ pub const gpio_v1 = packed struct {
         input_analog = 0b00_00,
         input_floating = 0b01_00,
         input_pushpull = 0b10_00,
-        output_10Mhz_Gpo_pushpull = 0b00_01,
-        output_10Mhz_Gpo_opendrain = 0b01_01,
-        output_10Mhz_Af_pushpull = 0b10_01,
-        output_10Mhz_Af_opendrain = 0b11_01,
-        output_2Mhz_Gpo_pushpull = 0b00_10,
-        output_2Mhz_Gpo_opendrain = 0b01_10,
-        output_2Mhz_Af_pushpull = 0b10_10,
-        output_2Mhz_Af_opendrain = 0b11_10,
-        output_50Mhz_Gpo_pushpull = 0b00_11,
-        output_50Mhz_Gpo_opendrain = 0b01_11,
-        output_50Mhz_Af_pushpull = 0b10_11,
-        output_50Mhz_Af_opendrain = 0b11_11,
+        output_10Mhz_gpo_pushpull = 0b00_01,
+        output_10Mhz_gpo_opendrain = 0b01_01,
+        output_10Mhz_af_pushpull = 0b10_01,
+        output_10Mhz_af_opendrain = 0b11_01,
+        output_2Mhz_gpo_pushpull = 0b00_10,
+        output_2Mhz_gpo_opendrain = 0b01_10,
+        output_2Mhz_af_pushpull = 0b10_10,
+        output_2Mhz_af_opendrain = 0b11_10,
+        output_50Mhz_gpo_pushpull = 0b00_11,
+        output_50Mhz_gpo_opendrain = 0b01_11,
+        output_50Mhz_af_pushpull = 0b10_11,
+        output_50Mhz_af_opendrain = 0b11_11,
     };
 
     /// Put the pin into input mode.
@@ -60,21 +59,20 @@ pub const gpio_v1 = packed struct {
     pub fn set_as_output(self: gpio_v1, pin: u4, speed: Speed) void {
         const block = self.block;
 
-        const mask: u32 = 0b1111;
+        const mask: u64 = 0b1111;
 
-        const in_word_offset = (@as(u5, pin) % 8) * 4;
-        const word_offset: u32 = if (pin > 7) 1 else 0;
+        const in_word_offset = (@as(u6, pin)) * 4;
 
         const value_e: CNF_MODE_e = switch (speed) {
-            .low => .output_2Mhz_Gpo_pushpull,
-            .medium => .output_10Mhz_Gpo_pushpull,
-            .high => .output_10Mhz_Gpo_pushpull,
-            .veryhigh => .output_50Mhz_Gpo_pushpull,
+            .low => .output_2Mhz_gpo_pushpull,
+            .medium => .output_10Mhz_gpo_pushpull,
+            .high => .output_10Mhz_gpo_pushpull,
+            .veryhigh => .output_50Mhz_gpo_pushpull,
         };
-        const value: u32 = @intFromEnum(value_e);
+        const value: u64 = @intFromEnum(value_e);
 
-        block.CR[word_offset].raw &= ~(mask << in_word_offset); //Mask
-        block.CR[word_offset].raw |= (value << in_word_offset); //Mask
+        block.CR.raw &= ~(mask << in_word_offset); //Mask
+        block.CR.raw |= (value << in_word_offset); //Mask
     }
 
     pub fn is_high(self: gpio_v1, pin: u4) bool {
