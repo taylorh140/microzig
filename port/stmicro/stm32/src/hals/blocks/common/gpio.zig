@@ -37,4 +37,12 @@ pub const GpioPin = struct {
     pub fn toggle(self: GpioPin) void {
         self.port.toggle(self.pin);
     }
+
+    pub fn set_high(self: GpioPin) void {
+        self.port.set_high(self.pin);
+    }
+
+    pub fn set_low(self: GpioPin) void {
+        self.port.set_low(self.pin);
+    }
 };
